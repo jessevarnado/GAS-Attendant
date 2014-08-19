@@ -14,37 +14,37 @@ class TypeHelper
   @isDocumentProperties: (object)->
     object.toString() is 'DocumentProperties'
 
-class ExtOverridesFactory
+class AttendantOverridesFactory
   @override: (object)->
     switch
       when TypeHelper.isRange(object)
-        new RangeExt(object)
+        new RangeAttendant(object)
       when TypeHelper.isSpreadsheet(object)
-        new SpreadsheetExt(object)
+        new SpreadsheetAttendant(object)
       when TypeHelper.isSheet(object)
-        new SheetExt(object)
+        new SheetAttendant(object)
       when TypeHelper.isScriptProperties(object)
-        new ScriptPropertiesExt(object)
+        new ScriptPropertiesAttendant(object)
       when TypeHelper.isUserProperties(object)
-        new UserPropertiesExt(object)
+        new UserPropertiesAttendant(object)
       when TypeHelper.isDocumentProperties(object)
-        new DocumentPropertiesExt(object)
+        new DocumentPropertiesAttendant(object)
       else
         object
 
-class BaseExt
+class BaseAttendant
   constructor: (@object)->
 
   __noSuchMethod__: (id, args)->
     throw new TypeError unless @object[id]?
     returnObject = @object[id].apply(@object, args)
-    ExtOverridesFactory.override(returnObject)
+    AttendantOverridesFactory.override(returnObject)
 
   @staticNoSuchMethodGenerator: (thisArg, wrappedObject)->
     thisArg['__noSuchMethod__'] = (id, args)->
       throw new TypeError unless wrappedObject[id]?
       returnObject = wrappedObject[id].apply(wrappedObject, args)
-      ExtOverridesFactory.override(returnObject)
+      AttendantOverridesFactory.override(returnObject)
 
 class SheetIterator
   eachRow: (callback)->
@@ -97,28 +97,28 @@ class SheetAppender
         return row
     null
 
-class SpreadsheetExt extends Utilities.mixOf BaseExt, SheetIterator, SheetAppender
+class SpreadsheetAttendant extends Utilities.mixOf BaseAttendant, SheetIterator, SheetAppender
   getEntireRange: ->
     sheet = @getActiveSheet()
     sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns())
 
   toString: ->
-    "SpreadsheetExt"
+    "SpreadsheetAttendant"
 
 
-class SheetExt extends Utilities.mixOf BaseExt, SheetIterator, SheetAppender
+class SheetAttendant extends Utilities.mixOf BaseAttendant, SheetIterator, SheetAppender
   getEntireRange: ->
     @getRange(1, 1, @getMaxRows(), @getMaxColumns())
 
   toString: ->
-    "SheetExt"
+    "SheetAttendant"
 
-class RangeExt extends BaseExt
+class RangeAttendant extends BaseAttendant
   isBlank: ->
     try
       @object.isBlank()
     catch error
-      #LoggerExt.debug('Built in Range.isBlank() failed trying backup')
+      LoggerAttendant.debug('Built in Range.isBlank() failed trying backup')
       values = @includeAllColumns().getValues()
       for row in values
         for value in row
@@ -181,7 +181,7 @@ class RangeExt extends BaseExt
     while columnIterator.hasNext()
       callback(columnIterator.next(), columnIterator.currentIndex)
 
-class RangeExtIterator
+class RangeAttendantIterator
   constructor: (@range)->
     @currentIndex = 1
     @reversed = false
@@ -201,7 +201,7 @@ class RangeExtIterator
     @currentIndex = index if 0 < index <= @getSize()
     @
 
-class RangeRowIterator extends RangeExtIterator
+class RangeRowIterator extends RangeAttendantIterator
   getSize: ->
     @range.getNumRows()
 
@@ -216,7 +216,7 @@ class RangeRowIterator extends RangeExtIterator
       @currentIndex++
     sheet.getRange(rowIndex, columnIndex, 1, @range.getNumColumns())
 
-class RangeColumnIterator extends RangeExtIterator
+class RangeColumnIterator extends RangeAttendantIterator
   getSize: ->
     @range.getNumColumns()
 
@@ -231,7 +231,7 @@ class RangeColumnIterator extends RangeExtIterator
       @currentIndex++
     sheet.getRange(rowIndex, columnIndex, @range.getNumRows(), 1)
 
-class PropertiesExt
+class PropertiesAttendant
   getJSONProperty: (key)->
     JSON.parse(PropertiesService.getScriptProperties().getProperty(key))
 
@@ -252,26 +252,26 @@ class PropertiesExt
       @setJSONProperty(key, map)
     @
 
-class ScriptPropertiesExt extends Utilities.mixOf BaseExt, PropertiesExt
-class UserPropertiesExt extends Utilities.mixOf BaseExt, PropertiesExt
-class DocumentPropertiesExt extends Utilities.mixOf BaseExt, PropertiesExt
+class ScriptPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
+class UserPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
+class DocumentPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
 
-class PropertiesServiceExt
+class PropertiesServiceAttendant
   @__noSuchMethod__: (id, args)->
     throw new TypeError unless PropertiesService[id]?
     returnObject = PropertiesService[id].apply(PropertiesService, args)
-    ExtOverridesFactory.override(returnObject)
+    AttendantOverridesFactory.override(returnObject)
 
-class SpreadsheetAppExt
+class SpreadsheetAppAttendant
 
   @DataValidationCriteria = SpreadsheetApp.DataValidationCriteria
 
   @__noSuchMethod__: (id, args)->
     throw new TypeError unless SpreadsheetApp[id]?
     returnObject = SpreadsheetApp[id].apply(SpreadsheetApp, args)
-    ExtOverridesFactory.override(returnObject)
+    AttendantOverridesFactory.override(returnObject)
 
-class LoggerExt
+class LoggerAttendant
   @SEVERITY =
     UNKNOWN: 5
     FATAL: 4
@@ -280,58 +280,58 @@ class LoggerExt
     INFO: 1
     DEBUG: 0
 
-  level = LoggerExt.SEVERITY.WARN
+  level = LoggerAttendant.SEVERITY.WARN
 
   @getLevel: ->
     level
 
   @setLevel: (value)->
-    level = value if LoggerExt.SEVERITY.DEBUG <= value <= LoggerExt.SEVERITY.UNKNOWN
+    level = value if LoggerAttendant.SEVERITY.DEBUG <= value <= LoggerAttendant.SEVERITY.UNKNOWN
 
   @isDebug: ->
-    LoggerExt.getLevel() <= LoggerExt.SEVERITY.DEBUG
+    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.DEBUG
 
   @isInfo: ->
-    LoggerExt.getLevel() <= LoggerExt.SEVERITY.INFO
+    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.INFO
 
   @isWarn: ->
-    LoggerExt.getLevel() <= LoggerExt.SEVERITY.WARN
+    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.WARN
 
   @isError: ->
-    LoggerExt.getLevel() <= LoggerExt.SEVERITY.ERROR
+    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.ERROR
 
   @isFatal: ->
-    LoggerExt.getLevel() <= LoggerExt.SEVERITY.FATAL
+    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.FATAL
 
-  @log: (severity = LoggerExt.SEVERITY.UNKNOWN, message = '', args...)->
-    return if severity < LoggerExt.getLevel()
-    formattedMessage = LoggerExt.formatMessage(severity, message)
+  @log: (severity = LoggerAttendant.SEVERITY.UNKNOWN, message = '', args...)->
+    return if severity < LoggerAttendant.getLevel()
+    formattedMessage = LoggerAttendant.formatMessage(severity, message)
     Logger.log(formattedMessage, args...)
 
   @formatMessage: (severity, message)->
     formattedLevel = switch severity
-      when LoggerExt.SEVERITY.DEBUG then 'DEBUG'
-      when LoggerExt.SEVERITY.INFO then 'INFO'
-      when LoggerExt.SEVERITY.WARN then 'WARN'
-      when LoggerExt.SEVERITY.ERROR then 'ERROR'
-      when LoggerExt.SEVERITY.FATAL then 'FATAL'
+      when LoggerAttendant.SEVERITY.DEBUG then 'DEBUG'
+      when LoggerAttendant.SEVERITY.INFO then 'INFO'
+      when LoggerAttendant.SEVERITY.WARN then 'WARN'
+      when LoggerAttendant.SEVERITY.ERROR then 'ERROR'
+      when LoggerAttendant.SEVERITY.FATAL then 'FATAL'
       else 'UNKNOWN'
     "#{formattedLevel}: #{message}"
 
   @debug: (message, args...)->
-    LoggerExt.log(LoggerExt.SEVERITY.DEBUG, message, args...)
+    LoggerAttendant.log(LoggerAttendant.SEVERITY.DEBUG, message, args...)
 
   @info: (message, args...)->
-    LoggerExt.log(LoggerExt.SEVERITY.INFO, message, args...)
+    LoggerAttendant.log(LoggerAttendant.SEVERITY.INFO, message, args...)
 
   @warn: (message, args...)->
-    LoggerExt.log(LoggerExt.SEVERITY.WARN, message, args...)
+    LoggerAttendant.log(LoggerAttendant.SEVERITY.WARN, message, args...)
 
   @error: (message, args...)->
-    LoggerExt.log(LoggerExt.SEVERITY.ERROR, message, args...)
+    LoggerAttendant.log(LoggerAttendant.SEVERITY.ERROR, message, args...)
 
   @fatal: (message, args...)->
-    LoggerExt.log(LoggerExt.SEVERITY.FATAL, message, args...)
+    LoggerAttendant.log(LoggerAttendant.SEVERITY.FATAL, message, args...)
 
 class Utilities
   @merge: (left, right)->
@@ -378,6 +378,6 @@ class Utilities
       Mixed::[name] = method
     Mixed
 
-root.SpreadsheetAppExt = SpreadsheetAppExt
-root.PropertiesServiceExt = PropertiesServiceExt
-root.LoggerExt = LoggerExt
+root.SpreadsheetAppAttendant = SpreadsheetAppAttendant
+root.PropertiesServiceAttendant = PropertiesServiceAttendant
+root.LoggerAttendant = LoggerAttendant
