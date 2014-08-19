@@ -19,14 +19,14 @@ becomes
 SpreadsheetAppAttendant.getActiveSpreadsheet()
 ```
 
-### Note: You only have to replace the top level service object. The subsequent objects will automatically be wrapped with their Attendant equivalents.
+**Note: You only have to replace the top level service object. The subsequent objects will automatically be wrapped with their Attendant equivalents.**
  
 ## Current Service Attendants
 
 * SpreadsheetAppAttendant
-* [#SpreadsheetAttendant]
-* [#SheetAttendant]
-* RangeAttendant
+* [SpreadsheetAttendant](#spreadsheetattendant)
+* [SheetAttendant](#sheetattendant)
+* [RangeAttendant](#rangeattendant)
 * PropertiesServiceAttendant
 * ScriptPropertiesAttendant
 * UserPropertiesAttendant
@@ -34,25 +34,43 @@ SpreadsheetAppAttendant.getActiveSpreadsheet()
 * LoggerAttendant
 
 
-## SpreadsheetAttendant 
+## SpreadsheetAttendant  
+### Methods
+
+| Method | Return Type | Brief description |
+| ------ | ----------- | ----------------- |
+| [getEntireRange()](#spreadsheetattendant_getentirerange) | [RangeAttendant](#rangeattendant) | Get a range that contains all the columns and rows of a sheet |
+
+
+### SpreadsheetAttendant.getEntireRange()
+
+Get a range that contains all the columns and rows of a sheet
+
+```javascript
+  var range = SpreadsheetAppAttendant.getSpreadsheet().getEntireRange();
+```
+
+**Return**
+[RangeAttendant](#rangeattendant)
+
 ## SheetAttendant
 ### Methods
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
-| [getEntireRange()](#getEntireRange) | RangeAttendant | Get a range that contains all the columns and rows of a sheet |
+| [getEntireRange()](#sheetattendant_getentirerange) | [RangeAttendant](#rangeattendant) | Get a range that contains all the columns and rows of a sheet |
 
 
-### getEntireRange
+### SheetAttendant.getEntireRange()
 
 Get a range that contains all the columns and rows of a sheet
 
 ```javascript
-  var range = SpreadsheetAppAttendant.getSpreadsheet.getEntireRange();
+  var range = SpreadsheetAppAttendant.getActiveSheet().getEntireRange();
 ```
 
 **Return**
-(RangeAttendant)
+[RangeAttendant](#rangeattendant)
 
 ## RangeAttendant
 
