@@ -43,15 +43,19 @@ class BaseAttendant
 class SheetIterator
   eachRow: (callback)->
     @getEntireRange().eachRow(callback)
+    @
 
   eachRowReverse: (callback)->
     @getEntireRange().eachRowReverse(callback)
+    @
 
   eachColumn: (callback)->
     @getEntireRange().eachColumn(callback)
+    @
 
   eachColumnReverse: (callback)->
     @getEntireRange().eachColumnReverse(callback)
+    @
 
   rowIterator: ->
     @getEntireRange().rowIterator()
@@ -67,18 +71,22 @@ class SheetIterator
 
   eachDataRow: (callback)->
     @getDataRange().eachRow(callback)
+    @
 
   eachDataRowReverse: (callback)->
     @getDataRange().eachRowReverse(callback)
+    @
 
   eachDataColumn: (callback)->
     @getDataRange().eachColumn(callback)
+    @
 
   eachDataColumnReverse: (callback)->
     @getDataRange().eachColumnReverse(callback)
+    @
 
 class SheetAppender
-  appendRowRuturnRange: (data)->
+  appendRowReturnRange: (data)->
     sheet = @appendRow(data)
     rowIterator = sheet.rowIterator().reverse()
     while rowIterator.hasNext()
@@ -159,21 +167,25 @@ class RangeAttendant extends BaseAttendant
     rowIterator = @rowIterator()
     while rowIterator.hasNext()
       callback(rowIterator.next(), rowIterator.currentIndex)
+    @
 
   eachRowReverse: (callback)->
     rowIterator = @rowIterator().reverse()
     while rowIterator.hasNext()
       callback(rowIterator.next(), rowIterator.currentIndex)
+    @
 
   eachColumn: (callback)->
     columnIterator = @columnIterator()
     while columnIterator.hasNext()
       callback(columnIterator.next(), columnIterator.currentIndex)
+    @
 
   eachColumnReverse: (callback)->
     columnIterator = @columnIterator().reverse()
     while columnIterator.hasNext()
       callback(columnIterator.next(), columnIterator.currentIndex)
+    @
 
 class RangeAttendantIterator
   constructor: (@range)->
@@ -369,7 +381,7 @@ class Utilities
     class Mixed extends base
     for mixin in mixins by -1 #earlier mixins override later ones
       for name, method of mixin::
-      Mixed::[name] = method
+        Mixed::[name] = method
     Mixed
 
 root.SpreadsheetAppAttendant = SpreadsheetAppAttendant
