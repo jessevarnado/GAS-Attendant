@@ -1,4 +1,4 @@
-# Google Apps Script Attendant
+# Google Apps Script Service Attendant
 
 This library adds some missing functionality to Google Apps Script services. The library is written in Coffeescript and compiled to Javascript. Please use the Javascript version of the library. :) 
 
@@ -107,3 +107,7 @@ Boolean
 
 
 
+## TODO
+* Add more docs
+* Add compiled javascript
+* Add examples
