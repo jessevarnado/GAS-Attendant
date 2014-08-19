@@ -7,7 +7,7 @@ This library adds some missing functionality to Google Apps Script services. The
 
 Copy the contents of the compiled javascript file into a new file in your project. 
  
-Replace the top level Google App Script service objects with their Attendant equivalent. Then use the services as you normally would, except now you can take advantage of extras that the service attendants provide.
+Replace the top level Google App Script service objects with their Attendant equivalent. Then use the services as you normally would, except now you can take advantage of the extras that the service attendants provide.
 
 ```
 SpreadsheetApp.getActiveSpreadsheet()
@@ -24,8 +24,8 @@ SpreadsheetAppAttendant.getActiveSpreadsheet()
 ## Current Service Attendants
 
 * SpreadsheetAppAttendant
-* SpreadsheetAttendant
-* SheetAttendant
+* [#SpreadsheetAttendant]
+* [#SheetAttendant]
 * RangeAttendant
 * PropertiesServiceAttendant
 * ScriptPropertiesAttendant
@@ -34,12 +34,13 @@ SpreadsheetAppAttendant.getActiveSpreadsheet()
 * LoggerAttendant
 
 
-## SpreadsheetAttendant and SheetAttendant
+## SpreadsheetAttendant 
+## SheetAttendant
 ### Methods
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
-| [getEntireRange()](getEntireRange) | RangeAttendant | Get a range that contains all the columns and rows of a sheet |
+| [getEntireRange()](#getEntireRange) | RangeAttendant | Get a range that contains all the columns and rows of a sheet |
 
 
 ### getEntireRange
