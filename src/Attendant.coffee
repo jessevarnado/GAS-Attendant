@@ -40,12 +40,6 @@ class BaseAttendant
     returnObject = @object[id].apply(@object, args)
     AttendantOverrides.override(returnObject)
 
-  @staticNoSuchMethodGenerator: (thisArg, wrappedObject)->
-    thisArg['__noSuchMethod__'] = (id, args)->
-      throw new TypeError unless wrappedObject[id]?
-      returnObject = wrappedObject[id].apply(wrappedObject, args)
-      AttendantOverrides.override(returnObject)
-
 class SheetIterator
   eachRow: (callback)->
     @getEntireRange().eachRow(callback)
@@ -119,7 +113,7 @@ class RangeAttendant extends BaseAttendant
       @object.isBlank()
     catch error
       LoggerAttendant.debug('Built in Range.isBlank() failed trying backup')
-      values = @includeAllColumns().getValues()
+      values = @getValues()
       for row in values
         for value in row
           return false if value isnt ''
@@ -280,7 +274,7 @@ class LoggerAttendant
     INFO: 1
     DEBUG: 0
 
-  level = LoggerAttendant.SEVERITY.WARN
+  level = LoggerAttendant.SEVERITY.INFO
 
   @getLevel: ->
     level
