@@ -14,7 +14,7 @@ class TypeHelper
   @isDocumentProperties: (object)->
     object.toString() is 'DocumentProperties'
 
-class AttendantOverridesFactory
+class AttendantOverrides
   @override: (object)->
     switch
       when TypeHelper.isRange(object)
@@ -38,13 +38,13 @@ class BaseAttendant
   __noSuchMethod__: (id, args)->
     throw new TypeError unless @object[id]?
     returnObject = @object[id].apply(@object, args)
-    AttendantOverridesFactory.override(returnObject)
+    AttendantOverrides.override(returnObject)
 
   @staticNoSuchMethodGenerator: (thisArg, wrappedObject)->
     thisArg['__noSuchMethod__'] = (id, args)->
       throw new TypeError unless wrappedObject[id]?
       returnObject = wrappedObject[id].apply(wrappedObject, args)
-      AttendantOverridesFactory.override(returnObject)
+      AttendantOverrides.override(returnObject)
 
 class SheetIterator
   eachRow: (callback)->
@@ -260,7 +260,7 @@ class PropertiesServiceAttendant
   @__noSuchMethod__: (id, args)->
     throw new TypeError unless PropertiesService[id]?
     returnObject = PropertiesService[id].apply(PropertiesService, args)
-    AttendantOverridesFactory.override(returnObject)
+    AttendantOverrides.override(returnObject)
 
 class SpreadsheetAppAttendant
 
@@ -269,7 +269,7 @@ class SpreadsheetAppAttendant
   @__noSuchMethod__: (id, args)->
     throw new TypeError unless SpreadsheetApp[id]?
     returnObject = SpreadsheetApp[id].apply(SpreadsheetApp, args)
-    AttendantOverridesFactory.override(returnObject)
+    AttendantOverrides.override(returnObject)
 
 class LoggerAttendant
   @SEVERITY =
