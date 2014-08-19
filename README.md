@@ -50,7 +50,7 @@ Get a range that contains all the columns and rows of the active sheet.
   var range = SpreadsheetAppAttendant.getSpreadsheet().getEntireRange();
 ```
 
-**Return**
+##### Return
 [RangeAttendant](#rangeattendant)
 
 ## SheetAttendant
@@ -69,7 +69,7 @@ Get a range that contains all the columns and rows of the sheet.
   var range = SpreadsheetAppAttendant.getActiveSheet().getEntireRange();
 ```
 
-**Return**
+##### Return
 [RangeAttendant](#rangeattendant)
 
 ## RangeAttendant
@@ -90,7 +90,7 @@ Expand the range to include all the columns of the rows in the range.
   LoggerAttendant.info(firstRow.getA1Notation());
 ```
 
-**Return**
+##### Return
 [RangeAttendant](#rangeattendant)
 
 ### RangeAttendant.isBlank()
@@ -102,7 +102,7 @@ Sometimes Range.isBlank() throws errors. This provides a backup implementation.
   LoggerAttendant.info(cell.isBlank());
 ```
 
-**Return**
+##### Return
 Boolean
 
 
