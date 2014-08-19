@@ -109,5 +109,4 @@ Boolean
 
 ## TODO
 * Add more docs
-* Add compiled javascript
 * Add examples
