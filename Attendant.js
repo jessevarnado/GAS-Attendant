@@ -86,19 +86,23 @@
     function SheetIterator() {}
 
     SheetIterator.prototype.eachRow = function(callback) {
-      return this.getEntireRange().eachRow(callback);
+      this.getEntireRange().eachRow(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachRowReverse = function(callback) {
-      return this.getEntireRange().eachRowReverse(callback);
+      this.getEntireRange().eachRowReverse(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachColumn = function(callback) {
-      return this.getEntireRange().eachColumn(callback);
+      this.getEntireRange().eachColumn(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachColumnReverse = function(callback) {
-      return this.getEntireRange().eachColumnReverse(callback);
+      this.getEntireRange().eachColumnReverse(callback);
+      return this;
     };
 
     SheetIterator.prototype.rowIterator = function() {
@@ -118,19 +122,23 @@
     };
 
     SheetIterator.prototype.eachDataRow = function(callback) {
-      return this.getDataRange().eachRow(callback);
+      this.getDataRange().eachRow(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachDataRowReverse = function(callback) {
-      return this.getDataRange().eachRowReverse(callback);
+      this.getDataRange().eachRowReverse(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachDataColumn = function(callback) {
-      return this.getDataRange().eachColumn(callback);
+      this.getDataRange().eachColumn(callback);
+      return this;
     };
 
     SheetIterator.prototype.eachDataColumnReverse = function(callback) {
-      return this.getDataRange().eachColumnReverse(callback);
+      this.getDataRange().eachColumnReverse(callback);
+      return this;
     };
 
     return SheetIterator;
@@ -140,7 +148,7 @@
   SheetAppender = (function() {
     function SheetAppender() {}
 
-    SheetAppender.prototype.appendRowRuturnRange = function(data) {
+    SheetAppender.prototype.appendRowReturnRange = function(data) {
       var finder, row, rowIterator, sheet, values;
       sheet = this.appendRow(data);
       rowIterator = sheet.rowIterator().reverse();
@@ -289,43 +297,39 @@
     };
 
     RangeAttendant.prototype.eachRow = function(callback) {
-      var rowIterator, _results;
+      var rowIterator;
       rowIterator = this.rowIterator();
-      _results = [];
       while (rowIterator.hasNext()) {
-        _results.push(callback(rowIterator.next(), rowIterator.currentIndex));
+        callback(rowIterator.next(), rowIterator.currentIndex);
       }
-      return _results;
+      return this;
     };
 
     RangeAttendant.prototype.eachRowReverse = function(callback) {
-      var rowIterator, _results;
+      var rowIterator;
       rowIterator = this.rowIterator().reverse();
-      _results = [];
       while (rowIterator.hasNext()) {
-        _results.push(callback(rowIterator.next(), rowIterator.currentIndex));
+        callback(rowIterator.next(), rowIterator.currentIndex);
       }
-      return _results;
+      return this;
     };
 
     RangeAttendant.prototype.eachColumn = function(callback) {
-      var columnIterator, _results;
+      var columnIterator;
       columnIterator = this.columnIterator();
-      _results = [];
       while (columnIterator.hasNext()) {
-        _results.push(callback(columnIterator.next(), columnIterator.currentIndex));
+        callback(columnIterator.next(), columnIterator.currentIndex);
       }
-      return _results;
+      return this;
     };
 
     RangeAttendant.prototype.eachColumnReverse = function(callback) {
-      var columnIterator, _results;
+      var columnIterator;
       columnIterator = this.columnIterator().reverse();
-      _results = [];
       while (columnIterator.hasNext()) {
-        _results.push(callback(columnIterator.next(), columnIterator.currentIndex));
+        callback(columnIterator.next(), columnIterator.currentIndex);
       }
-      return _results;
+      return this;
     };
 
     return RangeAttendant;

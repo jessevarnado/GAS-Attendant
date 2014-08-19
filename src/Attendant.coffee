@@ -86,7 +86,7 @@ class SheetIterator
     @
 
 class SheetAppender
-  appendRowRuturnRange: (data)->
+  appendRowReturnRange: (data)->
     sheet = @appendRow(data)
     rowIterator = sheet.rowIterator().reverse()
     while rowIterator.hasNext()
