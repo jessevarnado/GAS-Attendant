@@ -23,7 +23,7 @@ LoggerAttendant.info(SpreadsheetAppAttendant.getActiveSheet().getName());
  
 ## Current Service Attendants
 
-* SpreadsheetAppAttendant
+* [SpreadsheetAppAttendant](#spreadsheetappattendant)
 * [SpreadsheetAttendant](#spreadsheetattendant)
 * [SheetAttendant](#sheetattendant)
 * [RangeAttendant](#rangeattendant)
@@ -33,76 +33,87 @@ LoggerAttendant.info(SpreadsheetAppAttendant.getActiveSheet().getName());
 * DocumentPropertiesAttendant
 * LoggerAttendant
 
+## SpreadsheetAppAttendant
+
+This attendant is only used to wrap the other services though a bit of meta programming magic. No extras are available at the moment.
 
 ## SpreadsheetAttendant  
 ### Methods
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
-| [getEntireRange()](#spreadsheetattendantgetentirerange) | [RangeAttendant](#rangeattendant) | Get a range that contains all the columns and rows of the active sheet. |
-| [eachRow(callback)](#spreadsheetattendanteachrow) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each row in the active sheet of the spreadsheet starting from the top and moving down. |
-| [eachRowReverse(callback)](#spreadsheetattendanteachrowreverse) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each row in the active sheet of the spreadsheet starting from the bottom and moving up. |
-| [eachColumn(callback)](#spreadsheetattendanteachcolumn) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each column in the active sheet of the spreadsheet starting from the left and moving right. |
-| [eachColumnReverse(callback)](#spreadsheetattendanteachcolumnreverse) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each column in the active sheet of the spreadsheet starting from the right and moving left. |
-| [rowIterator()](#spreadsheetattendantrowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the rows in the active sheet of the spreadsheet. |
+| [appendRowReturnRange(data)](#spreadsheetattendantappendrowreturnrangedata) | [RangeAttendant](#rangeattendant) | Appends data to the active sheet, searches the sheet for the appended data, and returns the range of the appended row. |
 | [columnIterator()](#spreadsheetattendantcolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the columns in the active sheet of the spreadsheet. |
-| [eachDataRow(callback)](#spreadsheetattendanteachdatarow) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data row in the active sheet of the spreadsheet starting from the top and moving down. |
-| [eachDataRowReverse(callback)](#spreadsheetattendanteachdatarowreverse) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data row in the active sheet of the spreadsheet starting from the bottom and moving up. |
-| [eachDataColumn(callback)](#spreadsheetattendanteachdatacolumn) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data column in the active sheet of the spreadsheet starting from the left and moving right. |
-| [eachDataColumnReverse(callback)](#spreadsheetattendanteachdatacolumnreverse) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data column in the active sheet of the spreadsheet starting from the right and moving left. |
-| [dataRowIterator()](#spreadsheetattendantdatarowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the data rows in the active sheet of the spreadsheet. |
 | [dataColumnIterator()](#spreadsheetattendantdatacolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the data columns in the active sheet of the spreadsheet. |
-| [appendRowReturnRange(data)](#spreadsheetattendantappendrowreturnrange) | [RangeAttendant](#rangeattendant) | Appends data, searches the sheet for the appended data, and returns the range of the appended row |
+| [dataRowIterator()](#spreadsheetattendantdatarowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the data rows in the active sheet of the spreadsheet. |
+| [eachColumn(callback)](#spreadsheetattendanteachcolumncallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each column in the active sheet of the spreadsheet starting from the left and moving right. |
+| [eachColumnReverse(callback)](#spreadsheetattendanteachcolumnreversecallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each column in the active sheet of the spreadsheet starting from the right and moving left. |
+| [eachDataColumn(callback)](#spreadsheetattendanteachdatacolumncallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data column in the active sheet of the spreadsheet starting from the left and moving right. |
+| [eachDataColumnReverse(callback)](#spreadsheetattendanteachdatacolumnreversecallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data column in the active sheet of the spreadsheet starting from the right and moving left. |
+| [eachDataRow(callback)](#spreadsheetattendanteachdatarowcallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data row in the active sheet of the spreadsheet starting from the top and moving down. |
+| [eachDataRowReverse(callback)](#spreadsheetattendanteachdatarowreversecallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each data row in the active sheet of the spreadsheet starting from the bottom and moving up. |
+| [eachRow(callback)](#spreadsheetattendanteachrowcallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each row in the active sheet of the spreadsheet starting from the top and moving down. |
+| [eachRowReverse(callback)](#spreadsheetattendanteachrowreversecallback) | [SpreadsheetAttendant](#spreadsheetattendant) | Execute callback for each row in the active sheet of the spreadsheet starting from the bottom and moving up. |
+| [getEntireRange()](#spreadsheetattendantgetentirerange) | [RangeAttendant](#rangeattendant) | Get a range that contains all the columns and rows of the active sheet. |
+| [rowIterator()](#spreadsheetattendantrowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the rows in the active sheet of the spreadsheet. |
 
 
-### SpreadsheetAttendant.getEntireRange()
+### SpreadsheetAttendant.appendRowReturnRange(data)
 
-Get a range that contains all the columns and rows of the active sheet.
+Appends data to the active sheet, searches the sheet for the appended data starting at the bottom, and returns the range of the appended row.
 
-```javascript
-  var range = SpreadsheetAppAttendant.getSpreadsheet().getEntireRange();
+```
+  function moveRow(row) {
+    var newRow = SpreadsheetAppAttendant.getSpreadsheet().appendRowReturnRange(row.getValues()[0]);
+    row.clear();
+    SpreadsheetAppAttendant.getSpreadsheet().setActiveRange(newRow);
+  }  
 ```
 
 ##### Return
-[RangeAttendant](#rangeattendant)
+[RangeAttendant](#rangeattendant)  
 
-### SpreadsheetAttendant.eachRow(callback)
+### SpreadsheetAttendant.columnIterator()
 
-Execute callback for each row in the active sheet of the spreadsheet starting from the top and moving down.
-
-#### Parameters
-
-| Name | Type | Description |
-|------|------|-------------|
-|callback | Function | The function to call with each row in the active sheet. | 
+Get a range iterator that iterates over all the columns in the active sheet of the spreadsheet.
 
 ```
-  SpreadsheetAppAttendant.getSpreadsheet().eachRow(function (row) {
-    LoggerAttendant.info(row.getA1Notation());
-  });
+  var iterator = SpreadsheetAppAttendant.getSpreadsheet().columnIterator();
+  while (iterator.hasNext()) {
+    LoggerAttendant.info(iterator.next().getA1Notation());
+  }
 ```
 
 ##### Return
-[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+[RangeAttendantIterator](#rangeattendantiterator)  
 
-### SpreadsheetAttendant.eachRowReverse(callback)
+### SpreadsheetAttendant.dataColumnIterator()
 
-Execute callback for each row in the active sheet of the spreadsheet starting from the bottom and moving up.
-
-#### Parameters
-
-| Name | Type | Description |
-|------|------|-------------|
-|callback | Function | The function to call with each row in the active sheet. | 
+Get a range iterator that iterates over all the data columns in the active sheet of the spreadsheet.
 
 ```
-  SpreadsheetAppAttendant.getSpreadsheet().eachRowReverse(function (row) {
-    LoggerAttendant.info(row.getA1Notation());
-  });
+  var iterator = SpreadsheetAppAttendant.getSpreadsheet().dataColumnIterator();
+  while (iterator.hasNext()) {
+    LoggerAttendant.info(iterator.next().getA1Notation());
+  }
 ```
 
 ##### Return
-[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+[RangeAttendantIterator](#rangeattendantiterator)   
+
+### SpreadsheetAttendant.dataRowIterator()
+
+Get a range iterator that iterates over all the data rows in the active sheet of the spreadsheet.
+
+```
+  var iterator = SpreadsheetAppAttendant.getSpreadsheet().dataRowIterator();
+  while (iterator.hasNext()) {
+    LoggerAttendant.info(iterator.next().getA1Notation());
+  }
+```
+
+##### Return
+[RangeAttendantIterator](#rangeattendantiterator)        
 
 ### SpreadsheetAttendant.eachColumn(callback)
 
@@ -142,12 +153,164 @@ Execute callback for each column in the active sheet of the spreadsheet starting
 ##### Return
 [SpreadsheetAttendant](#spreadsheetattendant) - for chaining
 
+### SpreadsheetAttendant.eachDataColumn(callback)
+
+Execute callback for each data column in the active sheet of the spreadsheet starting from the left and moving right.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each data column in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachDataColumn(function (column) {
+    LoggerAttendant.info(column.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+
+### SpreadsheetAttendant.eachDataColumnReverse(callback)
+
+Execute callback for each data column in the active sheet of the spreadsheet starting from the right and moving left.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each data column in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachDataColumnReverse(function (column) {
+    LoggerAttendant.info(column.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining   
+
+### SpreadsheetAttendant.eachDataRow(callback)
+
+Execute callback for each data row in the active sheet of the spreadsheet starting from the top and moving down.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each data row in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachDataRow(function (row) {
+    LoggerAttendant.info(row.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+
+### SpreadsheetAttendant.eachDataRowReverse(callback)
+
+Execute callback for each data row in the active sheet of the spreadsheet starting from the bottom and moving up.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each data row in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachDataRowReverse(function (row) {
+    LoggerAttendant.info(row.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining  
+
+### SpreadsheetAttendant.eachRow(callback)
+
+Execute callback for each row in the active sheet of the spreadsheet starting from the top and moving down.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each row in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachRow(function (row) {
+    LoggerAttendant.info(row.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+
+### SpreadsheetAttendant.eachRowReverse(callback)
+
+Execute callback for each row in the active sheet of the spreadsheet starting from the bottom and moving up.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+|callback | Function | The function to call with each row in the active sheet. | 
+
+```
+  SpreadsheetAppAttendant.getSpreadsheet().eachRowReverse(function (row) {
+    LoggerAttendant.info(row.getA1Notation());
+  });
+```
+
+##### Return
+[SpreadsheetAttendant](#spreadsheetattendant) - for chaining
+
+### SpreadsheetAttendant.getEntireRange()
+
+Get a range that contains all the columns and rows of the active sheet.
+
+```javascript
+  var range = SpreadsheetAppAttendant.getSpreadsheet().getEntireRange();
+```
+
+##### Return
+[RangeAttendant](#rangeattendant)
+
+### SpreadsheetAttendant.rowIterator()
+
+Get a range iterator that iterates over all the rows in the active sheet of the spreadsheet.
+
+```
+  var iterator = SpreadsheetAppAttendant.getSpreadsheet().rowIterator();
+  while (iterator.hasNext()) {
+    LoggerAttendant.info(iterator.next().getA1Notation());
+  }
+```
+
+##### Return
+[RangeAttendantIterator](#rangeattendantiterator)
+
 ## SheetAttendant
 ### Methods
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
+| [appendRowReturnRange(data)](#sheetattendantappendrowreturnrangedata) | [RangeAttendant](#rangeattendant) | Appends data to the sheet, searches the sheet for the appended data, and returns the range of the appended row. |
+| [columnIterator()](#sheetattendantcolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the columns in the sheet. |
+| [dataColumnIterator()](#sheetattendantdatacolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the data columns in the sheet. |
+| [dataRowIterator()](#sheetattendantdatarowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the data rows in the sheet. |
+| [eachColumn(callback)](#sheetattendanteachcolumncallback) | [SheetAttendant](#sheetattendant) | Execute callback for each column in the sheet starting from the left and moving right. |
+| [eachColumnReverse(callback)](#sheetattendanteachcolumnreversecallback) | [SheetAttendant](#sheetattendant) | Execute callback for each column in the sheet starting from the right and moving left. |
+| [eachDataColumn(callback)](#sheetattendanteachdatacolumncallback) | [SheetAttendant](#sheetattendant) | Execute callback for each data column in the sheet starting from the left and moving right. |
+| [eachDataColumnReverse(callback)](#sheetattendanteachdatacolumnreversecallback) | [SheetAttendant](#sheetattendant) | Execute callback for each data column in the sheet starting from the right and moving left. |
+| [eachDataRow(callback)](#sheetattendanteachdatarowcallback) | [SheetAttendant](#sheetattendant) | Execute callback for each data row in the sheet starting from the top and moving down. |
+| [eachDataRowReverse(callback)](#sheetattendanteachdatarowreversecallback) | [SheetAttendant](#sheetattendant) | Execute callback for each data row in the sheet starting from the bottom and moving up. |
+| [eachRow(callback)](#sheetattendanteachrowcallback) | [SheetAttendant](#sheetattendant) | Execute callback for each row in the sheet starting from the top and moving down. |
+| [eachRowReverse(callback)](#sheetattendanteachrowreversecallback) | [SheetAttendant](#sheetattendant) | Execute callback for each row in the sheet starting from the bottom and moving up. |
 | [getEntireRange()](#sheetattendantgetentirerange) | [RangeAttendant](#rangeattendant) | Get a range that contains all the columns and rows of the sheet. |
+| [rowIterator()](#sheetattendantrowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a range iterator that iterates over all the rows in the sheet. |
 
 
 ### SheetAttendant.getEntireRange()
