@@ -578,7 +578,7 @@
       return LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.FATAL;
     };
 
-    LoggerAttendant.log = function() {
+    LoggerAttendant._log = function() {
       var args, formattedMessage, message, severity;
       severity = arguments[0], message = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
       if (severity == null) {
@@ -590,11 +590,12 @@
       if (severity < LoggerAttendant.getLevel()) {
         return;
       }
-      formattedMessage = LoggerAttendant.formatMessage(severity, message);
-      return Logger.log.apply(Logger, [formattedMessage].concat(__slice.call(args)));
+      formattedMessage = LoggerAttendant._formatMessage(severity, message);
+      Logger.log.apply(Logger, [formattedMessage].concat(__slice.call(args)));
+      return this;
     };
 
-    LoggerAttendant.formatMessage = function(severity, message) {
+    LoggerAttendant._formatMessage = function(severity, message) {
       var formattedLevel;
       formattedLevel = (function() {
         switch (severity) {
@@ -618,31 +619,31 @@
     LoggerAttendant.debug = function() {
       var args, message;
       message = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return LoggerAttendant.log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.DEBUG, message].concat(__slice.call(args)));
+      return LoggerAttendant._log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.DEBUG, message].concat(__slice.call(args)));
     };
 
     LoggerAttendant.info = function() {
       var args, message;
       message = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return LoggerAttendant.log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.INFO, message].concat(__slice.call(args)));
+      return LoggerAttendant._log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.INFO, message].concat(__slice.call(args)));
     };
 
     LoggerAttendant.warn = function() {
       var args, message;
       message = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return LoggerAttendant.log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.WARN, message].concat(__slice.call(args)));
+      return LoggerAttendant._log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.WARN, message].concat(__slice.call(args)));
     };
 
     LoggerAttendant.error = function() {
       var args, message;
       message = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return LoggerAttendant.log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.ERROR, message].concat(__slice.call(args)));
+      return LoggerAttendant._log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.ERROR, message].concat(__slice.call(args)));
     };
 
     LoggerAttendant.fatal = function() {
       var args, message;
       message = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return LoggerAttendant.log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.FATAL, message].concat(__slice.call(args)));
+      return LoggerAttendant._log.apply(LoggerAttendant, [LoggerAttendant.SEVERITY.FATAL, message].concat(__slice.call(args)));
     };
 
     return LoggerAttendant;
