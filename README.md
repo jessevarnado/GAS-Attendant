@@ -31,7 +31,7 @@ LoggerAttendant.info(SpreadsheetAppAttendant.getActiveSheet().getName());
 * ScriptPropertiesAttendant
 * UserPropertiesAttendant
 * DocumentPropertiesAttendant
-* LoggerAttendant
+* [LoggerAttendant](#loggerattendant)
 
 ## SpreadsheetAppAttendant
 
@@ -329,18 +329,18 @@ Get a range that contains all the columns and rows of the sheet.
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
+| [columnIterator()](#rangeattendantcolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a column iterator. |
+| [eachColumn(callback)](#rangeattendanteachcolumn) | [RangeAttendant](#rangeattendant) | Execute callback for each column in the range starting from the left and moving right. |
+| [eachColumnReverse(callback)](#rangeattendanteachcolumnreverse) | [RangeAttendant](#rangeattendant) | Execute callback for each column in the range starting from the right and moving left. |
+| [eachRow(callback)](#rangeattendanteachrow) | [RangeAttendant](#rangeattendant) | Execute callback for each row in the range starting from the top and moving down. |
+| [eachRowReverse(callback)](#rangeattendanteachrowreverse) | [RangeAttendant](#rangeattendant) | Execute callback for each row in the range starting from the bottom and moving up. |
 | [includeAllColumns()](#rangeattendantincludeallcolumns) | [RangeAttendant](#rangeattendant) | Expand the range to include all the columns of the rows in the range. |
 | [isBlank()](#rangeattendantisblank) | Boolean | Sometimes Range.isBlank() throws errors. This provides a backup implementation. |
 | [removeHeader()](#rangeattendantremoveheader) | [RangeAttendant](#rangeattendant) | Remove the header row from the range if it is included. If only the header row is included in the range return null. |
-| [sliceRows(start, length)](#rangeattendantslicerows) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the row at the *start* index through *length* rows or end of the range. |
-| [sliceColumns(start, length)](#rangeattendantslicecolumns) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the columns at the *start* index through *length* rows or end of the range. |
-| [slice(startRow, startColumn, rowLength, columnLength)](#rangeattendantslicecolumns) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the rows and columns at the *startRow* index and *startColumn* index through *rowLength* rows and *columnLength* columns or end of the range. |
 | [rowIterator()](#rangeattendantrowiterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a row iterator. |
-| [columnIterator()](#rangeattendantcolumniterator) | [RangeAttendantIterator](#rangeattendantiterator) | Get a column iterator. |
-| [eachRow(callback)](#rangeattendanteachrow) | [RangeAttendant](#rangeattendant) | Execute callback for each row in the range starting from the top and moving down. |
-| [eachRowReverse(callback)](#rangeattendanteachrowreverse) | [RangeAttendant](#rangeattendant) | Execute callback for each row in the range starting from the bottom and moving up. |
-| [eachColumn(callback)](#rangeattendanteachcolumn) | [RangeAttendant](#rangeattendant) | Execute callback for each column in the range starting from the left and moving right. |
-| [eachColumnReverse(callback)](#rangeattendanteachcolumnreverse) | [RangeAttendant](#rangeattendant) | Execute callback for each column in the range starting from the right and moving left. |
+| [slice(startRow, startColumn, rowLength, columnLength)](#rangeattendantslicecolumns) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the rows and columns at the *startRow* index and *startColumn* index through *rowLength* rows and *columnLength* columns or end of the range. |
+| [sliceColumns(start, length)](#rangeattendantslicecolumns) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the columns at the *start* index through *length* rows or end of the range. |
+| [sliceRows(start, length)](#rangeattendantslicerows) | [RangeAttendant](#rangeattendant) | Get a subset of a range including the row at the *start* index through *length* rows or end of the range. |
 
 ### RangeAttendant.includeAllColumns()
 
@@ -372,12 +372,41 @@ Boolean
 
 | Method | Return Type | Brief description |
 | ------ | ----------- | ----------------- |
-| [reverse()](#rangeattendantiteratorreverse) | [RangeAttendantIterator](#rangeattendantiterator) | Iterate over the range in reverse order. |
-| [hasNext()](#rangeattendantiteratorhasnext) | Boolean | Returns true if there are more rows or columns left in the range. |
 | [getSize()](#rangeattendantiteratorgetsize) | Number | Returns the total number of rows or columns in the range. |
-| [startAt()](#rangeattendantiteratorstartat) | [RangeAttendantIterator](#rangeattendantiterator) | Starts at the row or column at the passed in index. |
+| [hasNext()](#rangeattendantiteratorhasnext) | Boolean | Returns true if there are more rows or columns left in the range. |
 | [next()](#rangeattendantiteratornext) | [RangeAttendant](#rangeattendant) | Returns the next row or column in the range. |
+| [reverse()](#rangeattendantiteratorreverse) | [RangeAttendantIterator](#rangeattendantiterator) | Iterate over the range in reverse order. |
+| [startAt()](#rangeattendantiteratorstartat) | [RangeAttendantIterator](#rangeattendantiterator) | Starts at the row or column at the passed in index. |
 
+## LoggerAttendant
+
+### Properties
+
+| Property | Type | Description |
+| ------ | ----------- | ----------------- |
+| SEVERTITY | [SEVERITY](#severity) | An enumeration representing the logger severity levels. |
+
+### Methods
+
+| Method | Return Type | Brief description |
+| ------ | ----------- | ----------------- |
+| [debug(data)](#loggerattendantdebugdata) | [LoggerAttendant](#loggerattendant) | Writes a debug message to the logging console. |
+| [debug(format, values)](#loggerattendantdebugformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted debug message to the logging console, using the format and values provided. |
+| [error(data)](#loggerattendanterrordata) | [LoggerAttendant](#loggerattendant) | Writes a error message to the logging console. |
+| [error(format, values)](#loggerattendanterrorformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted error message to the logging console, using the format and values provided. |
+| [fatal(data)](#loggerattendantfataldata) | [LoggerAttendant](#loggerattendant) | Writes a fatal message to the logging console. |
+| [fatal(format, values)](#loggerattendantfatalformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted fatal message to the logging console, using the format and values provided. |
+| [getLevel()](#loggerattendantgetlevel) | Number | Returns the numeric value of the logger's severity. |
+| [info(data)](#loggerattendantinfodata) | [LoggerAttendant](#loggerattendant) | Writes a info message to the logging console. |
+| [info(format, values)](#loggerattendantinfoformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted info message to the logging console, using the format and values provided. |
+| [isDebug](#loggerattendantisdebug) | Boolean | Returns true if the current severity level allows for the printing of DEBUG messages. |
+| [isError](#loggerattendantiserror) | Boolean | Returns true if the current severity level allows for the printing of ERROR messages. |
+| [isFatal](#loggerattendantisfatal) | Boolean | Returns true if the current severity level allows for the printing of FATAL messages. |
+| [isInfo](#loggerattendantisinfo) | Boolean | Returns true if the current severity level allows for the printing of INFO messages. |
+| [isWarn](#loggerattendantiswarn) | Boolean | Returns true if the current severity level allows for the printing of WARN messages. |
+| [setLevel(value)](#loggerattendantsetlevel) | void | Set the logger's severity level. |
+| [warn(data)](#loggerattendantwarndata) | [LoggerAttendant](#loggerattendant) | Writes a warn message to the logging console. |
+| [warn(format, values)](#loggerattendantwarnformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted warn message to the logging console, using the format and values provided. |
 
 
 ## TODO
