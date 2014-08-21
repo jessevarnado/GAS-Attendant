@@ -194,7 +194,7 @@ class RangeAttendantIterator
 
   reverse: ->
     @currentIndex = @getSize()
-    @reversed = true
+    @reversed = not @reversed
     @
 
   hasNext: ->
