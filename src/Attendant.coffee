@@ -309,12 +309,13 @@ class LoggerAttendant
   @isFatal: ->
     LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.FATAL
 
-  @log: (severity = LoggerAttendant.SEVERITY.UNKNOWN, message = '', args...)->
+  @_log: (severity = LoggerAttendant.SEVERITY.UNKNOWN, message = '', args...)->
     return if severity < LoggerAttendant.getLevel()
-    formattedMessage = LoggerAttendant.formatMessage(severity, message)
+    formattedMessage = LoggerAttendant._formatMessage(severity, message)
     Logger.log(formattedMessage, args...)
+    @
 
-  @formatMessage: (severity, message)->
+  @_formatMessage: (severity, message)->
     formattedLevel = switch severity
       when LoggerAttendant.SEVERITY.DEBUG then 'DEBUG'
       when LoggerAttendant.SEVERITY.INFO then 'INFO'
@@ -325,19 +326,19 @@ class LoggerAttendant
     "#{formattedLevel}: #{message}"
 
   @debug: (message, args...)->
-    LoggerAttendant.log(LoggerAttendant.SEVERITY.DEBUG, message, args...)
+    LoggerAttendant._log(LoggerAttendant.SEVERITY.DEBUG, message, args...)
 
   @info: (message, args...)->
-    LoggerAttendant.log(LoggerAttendant.SEVERITY.INFO, message, args...)
+    LoggerAttendant._log(LoggerAttendant.SEVERITY.INFO, message, args...)
 
   @warn: (message, args...)->
-    LoggerAttendant.log(LoggerAttendant.SEVERITY.WARN, message, args...)
+    LoggerAttendant._log(LoggerAttendant.SEVERITY.WARN, message, args...)
 
   @error: (message, args...)->
-    LoggerAttendant.log(LoggerAttendant.SEVERITY.ERROR, message, args...)
+    LoggerAttendant._log(LoggerAttendant.SEVERITY.ERROR, message, args...)
 
   @fatal: (message, args...)->
-    LoggerAttendant.log(LoggerAttendant.SEVERITY.FATAL, message, args...)
+    LoggerAttendant._log(LoggerAttendant.SEVERITY.FATAL, message, args...)
 
 class Utilities
   @merge: (left, right)->
