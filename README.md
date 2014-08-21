@@ -399,11 +399,11 @@ Boolean
 | [getLevel()](#loggerattendantgetlevel) | Number | Returns the numeric value of the logger's severity. |
 | [info(data)](#loggerattendantinfodata) | [LoggerAttendant](#loggerattendant) | Writes a info message to the logging console. |
 | [info(format, values)](#loggerattendantinfoformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted info message to the logging console, using the format and values provided. |
-| [isDebug](#loggerattendantisdebug) | Boolean | Returns true if the current severity level allows for the printing of DEBUG messages. |
-| [isError](#loggerattendantiserror) | Boolean | Returns true if the current severity level allows for the printing of ERROR messages. |
-| [isFatal](#loggerattendantisfatal) | Boolean | Returns true if the current severity level allows for the printing of FATAL messages. |
-| [isInfo](#loggerattendantisinfo) | Boolean | Returns true if the current severity level allows for the printing of INFO messages. |
-| [isWarn](#loggerattendantiswarn) | Boolean | Returns true if the current severity level allows for the printing of WARN messages. |
+| [isDebug()](#loggerattendantisdebug) | Boolean | Returns true if the current severity level allows for the printing of DEBUG messages. |
+| [isError()](#loggerattendantiserror) | Boolean | Returns true if the current severity level allows for the printing of ERROR messages. |
+| [isFatal()](#loggerattendantisfatal) | Boolean | Returns true if the current severity level allows for the printing of FATAL messages. |
+| [isInfo()](#loggerattendantisinfo) | Boolean | Returns true if the current severity level allows for the printing of INFO messages. |
+| [isWarn()](#loggerattendantiswarn) | Boolean | Returns true if the current severity level allows for the printing of WARN messages. |
 | [setLevel(value)](#loggerattendantsetlevel) | void | Set the logger's severity level. |
 | [warn(data)](#loggerattendantwarndata) | [LoggerAttendant](#loggerattendant) | Writes a warn message to the logging console. |
 | [warn(format, values)](#loggerattendantwarnformatvalues) | [LoggerAttendant](#loggerattendant) | Writes a formatted warn message to the logging console, using the format and values provided. |
