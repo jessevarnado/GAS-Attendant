@@ -1,5 +1,50 @@
 root = exports ? this
 
+class AttendantUtilities
+  @merge: (left, right)->
+    unless left?
+      left = right
+      return left
+    for property of right
+      if AttendantUtilities.type(right[property]) is 'object'
+        if AttendantUtilities.type(left[property]) is 'object'
+          left[property] = AttendantUtilities.merge(left[property], right[property]);
+        else
+          left[property] = right[property];
+      else
+        left[property] = right[property];
+    left
+
+  @reverseMerge: (left, right)->
+    AttendantUtilities.merge(right, left)
+
+  @type: (obj) ->
+    if obj == undefined or obj == null
+      return String obj
+    classToType = {
+      '[object Boolean]': 'boolean',
+      '[object Number]': 'number',
+      '[object String]': 'string',
+      '[object Function]': 'function',
+      '[object Array]': 'array',
+      '[object Date]': 'date',
+      '[object RegExp]': 'regexp',
+      '[object Object]': 'object'
+    }
+    classToType[Object.prototype.toString.call(obj)]
+
+  @fetchDeep: (obj, fields...)->
+    reducer = (prev, curr)->
+      prev[curr]
+    fields.reduce(reducer, obj)
+
+  @mixOf: (base, mixins...) ->
+    class Mixed extends base
+    for mixin in mixins by -1 #earlier mixins override later ones
+      for name, method of mixin::
+        Mixed::[name] = method
+    Mixed
+
 class TypeHelper
   @isRange: (object)->
     object.toString() is 'Range'
@@ -14,31 +59,39 @@ class TypeHelper
   @isDocumentProperties: (object)->
     object.toString() is 'DocumentProperties'
 
-class AttendantOverrides
+class AttendantAdapter
   @override: (object)->
-    switch
-      when TypeHelper.isRange(object)
+    switch object.toString()
+      when 'Range'
         new RangeAttendant(object)
-      when TypeHelper.isSpreadsheet(object)
+      when 'Spreadsheet'
         new SpreadsheetAttendant(object)
-      when TypeHelper.isSheet(object)
+      when 'Sheet'
         new SheetAttendant(object)
-      when TypeHelper.isScriptProperties(object)
+      when 'ScriptProperties'
         new ScriptPropertiesAttendant(object)
-      when TypeHelper.isUserProperties(object)
+      when 'UserProperties'
         new UserPropertiesAttendant(object)
-      when TypeHelper.isDocumentProperties(object)
+      when 'DocumentProperties'
         new DocumentPropertiesAttendant(object)
       else
         object
 
+  @proxyMethod: (object, method, args)->
+    throw new TypeError unless object[method]?
+    castArguments = []
+    for arg in args
+      castArguments.push if arg['_baseObject']? then arg['_baseObject'] else arg
+    returnObject = object[method].apply(object, castArguments)
+
+    AttendantAdapter.override(returnObject)
+
+
 class BaseAttendant
-  constructor: (@object)->
+  constructor: (@_baseObject)->
 
   __noSuchMethod__: (id, args)->
-    throw new TypeError unless @object[id]?
-    returnObject = @object[id].apply(@object, args)
-    AttendantOverrides.override(returnObject)
+    AttendantAdapter.proxyMethod(@_baseObject, id, args)
 
 class SheetIterator
   eachRow: (callback)->
@@ -99,7 +152,7 @@ class SheetAppender
         return row
     null
 
-class SpreadsheetAttendant extends Utilities.mixOf BaseAttendant, SheetIterator, SheetAppender
+class SpreadsheetAttendant extends AttendantUtilities.mixOf BaseAttendant, SheetIterator, SheetAppender
   getEntireRange: ->
     sheet = @getActiveSheet()
     sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns())
@@ -108,7 +161,7 @@ class SpreadsheetAttendant extends Utilities.mixOf BaseAttendant, SheetIterator,
     "SpreadsheetAttendant"
 
 
-class SheetAttendant extends Utilities.mixOf BaseAttendant, SheetIterator, SheetAppender
+class SheetAttendant extends AttendantUtilities.mixOf BaseAttendant, SheetIterator, SheetAppender
   getEntireRange: ->
     @getRange(1, 1, @getMaxRows(), @getMaxColumns())
 
@@ -243,7 +296,7 @@ class PropertiesAttendant
 
   fetchDeepJSONProperty: (key, fields...)->
     property = @getJSONProperty(key)
-    Utilities.fetchDeep(property, fields...)
+    AttendantUtilities.fetchDeep(property, fields...)
 
   setJSONProperty: (key, value)->
     PropertiesService.getScriptProperties().setProperty(key, JSON.stringify(value))
@@ -252,78 +305,115 @@ class PropertiesAttendant
   mergePropertyMapping: (key, map)->
     mapping = @getJSONProperty(key)
     if mapping?
-      Utilities.merge(mapping, map)
+      AttendantUtilities.merge(mapping, map)
       @setJSONProperty(key, mapping)
     else
       @setJSONProperty(key, map)
     @
 
-class ScriptPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
-class UserPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
-class DocumentPropertiesAttendant extends Utilities.mixOf BaseAttendant, PropertiesAttendant
+class ScriptPropertiesAttendant extends AttendantUtilities.mixOf BaseAttendant, PropertiesAttendant
+class UserPropertiesAttendant extends AttendantUtilities.mixOf BaseAttendant, PropertiesAttendant
+class DocumentPropertiesAttendant extends AttendantUtilities.mixOf BaseAttendant, PropertiesAttendant
 
 class PropertiesServiceAttendant
   @__noSuchMethod__: (id, args)->
-    throw new TypeError unless PropertiesService[id]?
-    returnObject = PropertiesService[id].apply(PropertiesService, args)
-    AttendantOverrides.override(returnObject)
+    AttendantAdapter.proxyMethod(PropertiesService, id, args)
 
 class SpreadsheetAppAttendant
 
   @DataValidationCriteria = SpreadsheetApp.DataValidationCriteria
 
   @__noSuchMethod__: (id, args)->
-    throw new TypeError unless SpreadsheetApp[id]?
-    returnObject = SpreadsheetApp[id].apply(SpreadsheetApp, args)
-    AttendantOverrides.override(returnObject)
+    AttendantAdapter.proxyMethod(SpreadsheetApp, id, args)
+
+class Enum
+  @_size: 0
+  @_VALUES: {}
+
+  @values: () ->
+    values = new Array()
+    for value in Object.keys(@_VALUES)
+      values.push @_VALUES[value]
+    values
+
+  @valueOf: (name) ->
+    @_VALUES[name]
+
+  _name: undefined
+  _ordinal: undefined
+
+  constructor: () ->
+    Class = @getSuperclass()
+    @_name = Object.keys(Class._VALUES)[Class._size]
+    @_ordinal = Class._size
+    Class._size += 1
+    Class._VALUES[@_name] = this
+
+  name: () ->
+    @_name
+
+  ordinal: () ->
+    @_ordinal
+
+  compareTo: (other) ->
+    @_ordinal - other._ordinal
+
+  equals: (other) ->
+    this == other
+
+  toString: () ->
+    @_name
+
+  getClass: () ->
+    this.constructor
+
+  getSuperclass: () ->
+    @getClass().__super__.constructor
+
+class Severity extends Enum
+  @_VALUES = {@DEBUG, @INFO, @WARN, @ERROR, @FATAL}
+
+  @DEBUG = new (class extends Severity)
+  @INFO = new (class extends Severity)
+  @WARN = new (class extends Severity)
+  @ERROR = new (class extends Severity)
+  @FATAL = new (class extends Severity)
 
 class LoggerAttendant
-  @SEVERITY =
-    UNKNOWN: 5
-    FATAL: 4
-    ERROR: 3
-    WARN: 2
-    INFO: 1
-    DEBUG: 0
+  @SEVERITY = Severity
 
-  level = LoggerAttendant.SEVERITY.INFO
+  _level = LoggerAttendant.SEVERITY.INFO
 
   @getLevel: ->
-    level
+    _level
 
   @setLevel: (value)->
-    level = value if LoggerAttendant.SEVERITY.DEBUG <= value <= LoggerAttendant.SEVERITY.UNKNOWN
+    _level = value if LoggerAttendant.SEVERITY.valueOf(value)?
+    @
 
   @isDebug: ->
-    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.DEBUG
+    LoggerAttendant.level.compareTo(LoggerAttendant.SEVERITY.DEBUG) <= 0
 
   @isInfo: ->
-    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.INFO
+    LoggerAttendant.level.compareTo(LoggerAttendant.SEVERITY.INFO) <= 0
 
   @isWarn: ->
-    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.WARN
+    LoggerAttendant.level.compareTo(LoggerAttendant.SEVERITY.WARN) <= 0
 
   @isError: ->
-    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.ERROR
+    LoggerAttendant.level.compareTo(LoggerAttendant.SEVERITY.ERROR) <= 0
 
   @isFatal: ->
-    LoggerAttendant.getLevel() <= LoggerAttendant.SEVERITY.FATAL
+    LoggerAttendant.level.compareTo(LoggerAttendant.SEVERITY.FATAL) <= 0
 
-  @_log: (severity = LoggerAttendant.SEVERITY.UNKNOWN, message = '', args...)->
-    return if severity < LoggerAttendant.getLevel()
+  @_log: (severity = LoggerAttendant.SEVERITY.FATAL, message = '', args...)->
+    return @ unless LoggerAttendant.level.compareTo(severity) <= 0
     formattedMessage = LoggerAttendant._formatMessage(severity, message)
     Logger.log(formattedMessage, args...)
     @
 
   @_formatMessage: (severity, message)->
-    formattedLevel = switch severity
-      when LoggerAttendant.SEVERITY.DEBUG then 'DEBUG'
-      when LoggerAttendant.SEVERITY.INFO then 'INFO'
-      when LoggerAttendant.SEVERITY.WARN then 'WARN'
-      when LoggerAttendant.SEVERITY.ERROR then 'ERROR'
-      when LoggerAttendant.SEVERITY.FATAL then 'FATAL'
-      else 'UNKNOWN'
-    "#{formattedLevel}: #{message}"
+    "#{severity.toString()}: #{message}"
 
   @debug: (message, args...)->
     LoggerAttendant._log(LoggerAttendant.SEVERITY.DEBUG, message, args...)
@@ -340,50 +430,10 @@ class LoggerAttendant
   @fatal: (message, args...)->
     LoggerAttendant._log(LoggerAttendant.SEVERITY.FATAL, message, args...)
 
-class Utilities
-  @merge: (left, right)->
-    unless left?
-      left = right
-      return left
-    for property of right
-      if Utilities.type(right[property]) is 'object'
-        if Utilities.type(left[property]) is 'object'
-          left[property] = Utilities.merge(left[property], right[property]);
-        else
-          left[property] = right[property];
-      else
-        left[property] = right[property];
-    left
+  @__noSuchMethod__: (id, args)->
+    AttendantAdapter.proxyMethod(Logger, id, args)
 
-  @reverseMerge: (left, right)->
-    Utilities.merge(right, left)
-
-  @type: (obj) ->
-    if obj == undefined or obj == null
-      return String obj
-    classToType = {
-      '[object Boolean]': 'boolean',
-      '[object Number]': 'number',
-      '[object String]': 'string',
-      '[object Function]': 'function',
-      '[object Array]': 'array',
-      '[object Date]': 'date',
-      '[object RegExp]': 'regexp',
-      '[object Object]': 'object'
-    }
-    classToType[Object.prototype.toString.call(obj)]
-
-  @fetchDeep: (obj, fields...)->
-    reducer = (prev, curr)->
-      prev[curr]
-    fields.reduce(reducer, obj)
-
-  @mixOf: (base, mixins...) ->
-    class Mixed extends base
-    for mixin in mixins by -1 #earlier mixins override later ones
-      for name, method of mixin::
-        Mixed::[name] = method
-    Mixed
+Object.defineProperty(LoggerAttendant, 'level', { get: LoggerAttendant.getLevel, set: LoggerAttendant.setLevel })
 
 root.SpreadsheetAppAttendant = SpreadsheetAppAttendant
 root.PropertiesServiceAttendant = PropertiesServiceAttendant
