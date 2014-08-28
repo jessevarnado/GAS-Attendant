@@ -61,6 +61,7 @@ class TypeHelper
 
 class AttendantAdapter
   @override: (object)->
+    return object unless object?
     switch object.toString()
       when 'Range'
         new RangeAttendant(object)
@@ -81,7 +82,10 @@ class AttendantAdapter
     throw new TypeError unless object[method]?
     castArguments = []
     for arg in args
-      castArguments.push if arg['_baseObject']? then arg['_baseObject'] else arg
+      if AttendantUtilities.type(arg) is 'object' and '_baseObject' of arg
+        castArguments.push arg['_baseObject']
+      else
+        castArguments.push arg
     returnObject = object[method].apply(object, castArguments)
 
     AttendantAdapter.override(returnObject)
@@ -171,7 +175,7 @@ class SheetAttendant extends AttendantUtilities.mixOf BaseAttendant, SheetIterat
 class RangeAttendant extends BaseAttendant
   isBlank: ->
     try
-      @object.isBlank()
+      @_baseObject.isBlank()
     catch error
       LoggerAttendant.debug('Built in Range.isBlank() failed trying backup')
       values = @getValues()
