@@ -124,6 +124,9 @@
     function AttendantAdapter() {}
 
     AttendantAdapter.override = function(object) {
+      if (object == null) {
+        return object;
+      }
       switch (object.toString()) {
         case 'Range':
           return new RangeAttendant(object);
@@ -150,7 +153,11 @@
       castArguments = [];
       for (_i = 0, _len = args.length; _i < _len; _i++) {
         arg = args[_i];
-        castArguments.push(arg['_baseObject'] != null ? arg['_baseObject'] : arg);
+        if (AttendantUtilities.type(arg) === 'object' && '_baseObject' in arg) {
+          castArguments.push(arg['_baseObject']);
+        } else {
+          castArguments.push(arg);
+        }
       }
       returnObject = object[method].apply(object, castArguments);
       return AttendantAdapter.override(returnObject);
@@ -313,7 +320,7 @@
     RangeAttendant.prototype.isBlank = function() {
       var error, row, value, values, _i, _j, _len, _len1;
       try {
-        return this.object.isBlank();
+        return this._baseObject.isBlank();
       } catch (_error) {
         error = _error;
         LoggerAttendant.debug('Built in Range.isBlank() failed trying backup');
